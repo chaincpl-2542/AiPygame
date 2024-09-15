@@ -1,3 +1,4 @@
+import sys
 import pygame
 from enemy import Enemy
 from player import Player
@@ -18,21 +19,31 @@ bullets = []
 bulletCD = 0
 MaxCD = 15
 mouse_pos = pygame.mouse.get_pos()
+isShowEnemyLine = False
 
 def Spawn_enemies():
     
     for enemy in enemies:
         if(enemy.isDead == False):
             enemy.CreateEnemy()
-            enemy.FindPlayer(myPlayer.player_pos)
+            enemy.FindPlayer(myPlayer.player_pos,isShowEnemyLine)
             enemy.MoveToPlayer(myPlayer.player_pos,myPlayer.player_size)
             enemy.Update()
                              
 while running:
     
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
             running = False
+            
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_q:
+                if(isShowEnemyLine == True):
+                    isShowEnemyLine = False
+                else:
+                    if(isShowEnemyLine == False):
+                        isShowEnemyLine = True
 
     screen.fill("gray")
     pygame.draw.rect(screen, (247, 218, 200), pygame.Rect(0,((screen.get_height() / 4) * 3),screen.get_width(),screen.get_height()))
@@ -49,7 +60,9 @@ while running:
         bulletCD = MaxCD
         
         if pygame.mouse.get_pressed()[0]:
-            
+            direction = [mouse_pos[0] - myPlayer.player_pos[0], mouse_pos[1] - myPlayer.player_pos[1]]
+            bullets.append(Bullet(screen,myPlayer.player_pos,direction))
+        if pygame.mouse.get_pressed()[2]:
             direction = [mouse_pos[0] - myPlayer.player_pos[0], mouse_pos[1] - myPlayer.player_pos[1]]
             bullets.append(Bullet(screen,myPlayer.player_pos,direction))
         
@@ -67,7 +80,7 @@ while running:
         
             for enemy in enemies:
                 bullet.FindEnemies(enemy.enemy_pos,enemy.enemy_size,enemy)
- 
+        
     keys = pygame.key.get_pressed()
     myPlayer.PlayerMovement(keys,dt)
     

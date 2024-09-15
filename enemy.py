@@ -16,8 +16,9 @@ class Enemy:
     def CreateEnemy(self):
         pygame.draw.circle(self.screen,self.color,self.enemy_pos,self.enemy_size)
         
-    def FindPlayer(self,player_position):
-        pygame.draw.line(self.screen, self.color, self.enemy_pos, player_position, width=1)
+    def FindPlayer(self,player_position,isShow):
+        if(isShow):
+            pygame.draw.line(self.screen, self.color, self.enemy_pos, player_position, width=1)
         
     def MoveToPlayer(self,player_position,player_size):    
         distance = player_position.distance_to(self.enemy_pos) - (player_size + self.enemy_size)
