@@ -10,6 +10,8 @@ class Enemy:
         self.enemy_pos = pygame.Vector2(random.uniform(0,self.screen.get_width()),random.uniform(((self.screen.get_height() / 4) * 3), self.screen.get_height()))
         self.speed = 2  
         self.color = (random.uniform(0,255),random.uniform(0,255),random.uniform(0,255))
+        self.enemyHP = 1
+        self.isDead = False
 
     def CreateEnemy(self):
         pygame.draw.circle(self.screen,self.color,self.enemy_pos,self.enemy_size)
@@ -23,3 +25,14 @@ class Enemy:
         if(distance >= 0):
             direction = (player_position - self.enemy_pos).normalize()
             self.enemy_pos += direction * self.speed
+        
+    def Update(self):
+        if(self.enemyHP <= 0):
+            self.Respawn()
+    
+    def GetHit(self):
+        self.enemyHP -= 1
+        
+    def Respawn(self):
+        self.enemy_pos = pygame.Vector2(random.uniform(0,self.screen.get_width()),random.uniform(((self.screen.get_height() / 4) * 3), self.screen.get_height()))
+        self.enemyHP = 1

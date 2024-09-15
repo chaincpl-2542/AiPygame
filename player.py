@@ -25,7 +25,17 @@ class Player:
         if move_direction.length() > 0:
             move_direction = move_direction.normalize()
             
-        self.player_pos += move_direction * 300 * dt
+        if(self.player_pos.x <= self.player_size):
+            self.player_pos.x = self.player_size
+        elif(self.player_pos.x >= self.screen.get_width() - self.player_size):
+            self.player_pos.x = self.screen.get_width() - self.player_size
+        
+        if(self.player_pos.y >= self.screen.get_height()- self.player_size):
+            self.player_pos.y = self.screen.get_height() - self.player_size
+        elif(self.player_pos.y <= self.player_size):
+            self.player_pos.y = self.player_size
             
+        self.player_pos += move_direction * 300 * dt
+        
         
     
